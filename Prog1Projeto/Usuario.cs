@@ -16,12 +16,4 @@ namespace Prog1Projeto
 
         public abstract DateTime CalcularPrazoDevolucao(DateTime dataEmprestimo);
     }
-
-    public class Professor : Usuario
-    {
-        public override DateTime CalcularPrazoDevolucao(DateTime dataEmprestimo)
-        {
-            return dataEmprestimo.AddDays(15);
-        }
-    }
 }

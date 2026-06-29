@@ -96,6 +96,7 @@
     <Compile Include="Professor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relatorios.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>
   <ItemGroup>
