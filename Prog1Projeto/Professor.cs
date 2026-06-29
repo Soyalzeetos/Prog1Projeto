@@ -1,27 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using MySql.Data.MySqlClient;
+using System.Threading.Tasks;
 
 namespace Prog1Projeto
 {
-
-    public abstract class Usuario
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
-
-        public abstract DateTime CalcularPrazoDevolucao(DateTime dataEmprestimo);
-    }
-
     public class Professor : Usuario
     {
         public override DateTime CalcularPrazoDevolucao(DateTime dataEmprestimo)
         {
             return dataEmprestimo.AddDays(15);
         }
+    }
+    {
     }
 }
