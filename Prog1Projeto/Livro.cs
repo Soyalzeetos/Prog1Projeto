@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using Prog1Projeto;
+=======
+using MySql.Data.MySqlClient;
+>>>>>>> aa389bb542821a46c08c9b070e1ca48b28929089
 
 namespace Prog1Projeto
 {

@@ -47,12 +47,12 @@ namespace Prog1Projeto
         {
             if (livro_emprestado == null) return false;
 
-            return EmprestimoDAO.Inserir(livro_emprestado.ID_livro, nome_cliente, data_devolucao_prevista);
+            return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, nome_cliente, data_devolucao_prevista);
         }
 
         public bool Mostrar_emprestimo(out List<Emprestimo> emprestimos)
         {
-            emprestimos = EmprestimoDAO.ListarTodos();
+            emprestimos = EmprestimoDAO.ListarEmprestimos();
 
             if (emprestimos == null || emprestimos.Count == 0)
             {
@@ -63,7 +63,7 @@ namespace Prog1Projeto
 
         public bool Realizar_devolucao(int ID_emprestimo)
         {
-            var emprestimos = EmprestimoDAO.ListarTodos();
+            var emprestimos = EmprestimoDAO.ListarEmprestimos();
             Emprestimo emprestimo = emprestimos.Find(e => e.ID_emprestimo == ID_emprestimo && e.data_devolucao == null);
 
             if (emprestimo == null) return false;
@@ -73,7 +73,7 @@ namespace Prog1Projeto
 
         public bool Mostrar_emprestimo_aberto(out List<Emprestimo> abertos)
         {
-            var todos = EmprestimoDAO.ListarTodos();
+            var todos = EmprestimoDAO.ListarEmprestimos();
             abertos = todos.Where(e => e.data_devolucao == null).ToList();
 
             if (abertos.Count == 0) return false;
@@ -151,7 +151,7 @@ namespace Prog1Projeto
 
             if (sucesso)
             {
-                var emp = EmprestimoDAO.ListarTodos().Find(e => e.ID_emprestimo == id_emprestimo);
+                var emp = EmprestimoDAO.ListarEmprestimos().Find(e => e.ID_emprestimo == id_emprestimo);
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n  Devolucao feita com sucesso!");
