@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="Prog1Projeto/Livro.cs" />
+  </Folder>
   <Project Path="Prog1Projeto/Prog1Projeto.csproj" Id="55d2594f-82f0-426c-9099-6a8701470968" />
 </Solution>
