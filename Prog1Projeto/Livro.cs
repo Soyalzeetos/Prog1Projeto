@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-<<<<<<< HEAD
-using Prog1Projeto;
-=======
-using MySql.Data.MySqlClient;
->>>>>>> aa389bb542821a46c08c9b070e1ca48b28929089
 
 namespace Prog1Projeto
 {
@@ -16,6 +11,8 @@ namespace Prog1Projeto
         public int ID_livro { get; set; }
         public string titulo_livro { get; set; }
         public string autor_livro { get; set; }
+
+        public Livro() { }
 
         public Livro(int ID_livro, string titulo_livro, string autor_livro)
         {

@@ -93,7 +93,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aluno.cs" />
+    <Compile Include="Conexaobd.cs" />
     <Compile Include="Emprestimo.cs" />
+    <Compile Include="EmprestimoDAO.cs" />
+    <Compile Include="Livro.cs" />
+    <Compile Include="LivroDAO.cs" />
     <Compile Include="Professor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

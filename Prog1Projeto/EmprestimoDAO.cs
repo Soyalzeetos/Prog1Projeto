@@ -18,7 +18,7 @@ namespace Prog1Projeto
         private static Emprestimo MapearEmprestimo(MySqlDataReader leitor)
         {
             DateTime? data_devolucao = leitor.IsDBNull(leitor.GetOrdinal("data_devolucao"))
-                ? null
+                ? (DateTime?)null
                 : leitor.GetDateTime("data_devolucao");
 
             return new Emprestimo(

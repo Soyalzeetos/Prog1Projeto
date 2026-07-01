@@ -1,6 +1,9 @@
 <Solution>
   <Folder Name="/Itens de Solução/">
+    <File Path="Prog1Projeto/Conexaobd.cs" />
+    <File Path="Prog1Projeto/EmprestimoDAO.cs" />
     <File Path="Prog1Projeto/Livro.cs" />
+    <File Path="Prog1Projeto/LivroDAO.cs" />
   </Folder>
   <Project Path="Prog1Projeto/Prog1Projeto.csproj" Id="55d2594f-82f0-426c-9099-6a8701470968" />
 </Solution>
