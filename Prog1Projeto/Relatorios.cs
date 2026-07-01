@@ -1,35 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace Prog1Projeto
 {
     internal class Relatorios
     {
+        private readonly RelatorioDAO relatorioDAO = new RelatorioDAO();
+
         public void ComprovanteEmprestimo(Usuario usuario, string livro, DateTime dataEmprestimo)
         {
-            string caminhoArquivo = "$Comprovante_Emprestimo{usuario.Nome}.txt";
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(caminhoArquivo))
-                {
-                    writer.WriteLine("Comprovante de Empréstimo");
-                    writer.WriteLine("------------------------");
-                    writer.WriteLine($"Usuário: {usuario.Nome}");
-                    writer.WriteLine($"Livro: {livro}");
-                    writer.WriteLine($"Data do Empréstimo: {dataEmprestimo.ToShortDateString()}");
-                    writer.WriteLine($"Prazo de Devolução: {usuario.CalcularPrazoDevolucao(dataEmprestimo).ToShortDateString()}");
-                }
-                Console.WriteLine($"Comprovante de empréstimo gerado com sucesso em '{caminhoArquivo}'.");
+            relatorioDAO.GerarComprovanteEmprestimo(usuario.Nome, livro, dataEmprestimo, usuario.CalcularPrazoDevolucao(dataEmprestimo));
+        }
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao gerar o comprovante de empréstimo: {ex.Message}");
-            }
+        public void GerarRelatorioEmprestimos(List<Emprestimo> emprestimos)
+        {
+            relatorioDAO.GerarRelatorioEmprestimos(emprestimos);
         }
     }
 }
