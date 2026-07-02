@@ -11,7 +11,7 @@ namespace Prog1Projeto
     {
         public static MySqlConnection fazerconexao()
         {
-            MySqlConnection conectar = new MySqlConnection("server=localhost; database=biblioteca; uid=root; pwd=;");
+            MySqlConnection conectar = new MySqlConnection("server=localhost; database=biblioteca; uid=root; pwd=;  Allow Zero Datetime=True; Convert Zero Datetime=True;");
             return conectar;
         }
     }

@@ -43,9 +43,9 @@ namespace Prog1Projeto
         private static List<Emprestimo> Lista_Emprestimo = new List<Emprestimo>();
         private static EmprestimoDAO EmprestimoDAO = new EmprestimoDAO();
 
-        public bool Realizar_emprestimo(Livro livro_emprestado, string nome_cliente, string data_devolucao_prevista)
+        public bool Realizar_emprestimo(Livro livro_emprestado, string nome_cliente, string data_devolucao_prevista, bool disponibilidade)
         {
-            if (livro_emprestado == null) return false;
+            if (livro_emprestado == null || disponibilidade == false) return false;
 
             return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, nome_cliente, data_devolucao_prevista);
         }

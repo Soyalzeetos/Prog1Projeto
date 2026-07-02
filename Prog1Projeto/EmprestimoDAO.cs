@@ -15,18 +15,53 @@ namespace Prog1Projeto
             );
         }
 
+        private static DateTime? ReadNullableDate(MySqlDataReader leitor, string columnName)
+        {
+            int ord = leitor.GetOrdinal(columnName);
+            if (leitor.IsDBNull(ord)) return null;
+
+            object val = leitor.GetValue(ord);
+
+            if (val is DateTime dt) return dt;
+
+            if (val is string s)
+            {
+                if (string.IsNullOrWhiteSpace(s) || s.StartsWith("0000-00-00")) return null;
+                DateTime parsed;
+                if (DateTime.TryParse(s, out parsed)) return parsed;
+                return null;
+            }
+            try
+            {
+                return Convert.ToDateTime(val);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DateTime ReadDateSafe(MySqlDataReader leitor, string columnName, DateTime fallback)
+        {
+            var maybe = ReadNullableDate(leitor, columnName);
+            return maybe ?? fallback;
+        }
+
         private static Emprestimo MapearEmprestimo(MySqlDataReader leitor)
         {
-            DateTime? data_devolucao = leitor.IsDBNull(leitor.GetOrdinal("data_devolucao"))
-                ? (DateTime?)null
-                : leitor.GetDateTime("data_devolucao");
+            DateTime? data_devolucao = ReadNullableDate(leitor, "data_devolucao");
+
+            DateTime data_emprestimo = ReadDateSafe(leitor, "data_emprestimo", DateTime.MinValue);
+
+            var data_prevista_dt = ReadNullableDate(leitor, "data_prevista");
+            string data_prevista_str = data_prevista_dt?.ToString("yyyy-MM-dd") ?? null;
 
             return new Emprestimo(
                 leitor.GetInt32("id"),
                 MapearLivro(leitor),
                 leitor.GetString("nome"),
-                leitor.GetDateTime("data_emprestimo"),
-                leitor.GetDateTime("data_prevista").ToString("yyyy-MM-dd"),
+                data_emprestimo,
+                data_prevista_str,
                 data_devolucao
             );
         }
