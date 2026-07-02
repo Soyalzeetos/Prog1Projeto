@@ -11,14 +11,25 @@ namespace Prog1Projeto
         public int ID_livro { get; set; }
         public string titulo_livro { get; set; }
         public string autor_livro { get; set; }
+        public int ano_livro { get; set; }
 
-        public Livro() { }
+        public Livro() { this.ano_livro = 0; }
 
         public Livro(int ID_livro, string titulo_livro, string autor_livro)
         {
             this.ID_livro = ID_livro;
             this.titulo_livro = titulo_livro;
             this.autor_livro = autor_livro;
+            this.ano_livro = 0;
+        }
+
+        // Sobrecarga com ano do livro
+        public Livro(int ID_livro, string titulo_livro, string autor_livro, int ano_livro)
+        {
+            this.ID_livro = ID_livro;
+            this.titulo_livro = titulo_livro;
+            this.autor_livro = autor_livro;
+            this.ano_livro = ano_livro;
         }
     }
 
@@ -29,7 +40,7 @@ namespace Prog1Projeto
 
         private int proximoID = 1;
 
-        public bool Adicionar_livro(string titulo, string autor)
+        public bool Adicionar_livro(string titulo, string autor, int ano)
         {
             if (string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(autor))
             {
@@ -38,7 +49,7 @@ namespace Prog1Projeto
                 return false;
             }
 
-            LivroDAO.Inserir(titulo, autor);
+            LivroDAO.Inserir(titulo, autor, ano);
             return true;
         }
 
@@ -137,7 +148,11 @@ namespace Prog1Projeto
             Console.Write("  ");
             string autor_livro = Console.ReadLine();
 
-            bool sucesso = gerenciador.Adicionar_livro(titulo_livro, autor_livro);
+            Console.WriteLine("\n  Ano do livro:");
+            Console.Write("  ");
+            int ano_livro = int.Parse(Console.ReadLine());
+
+            bool sucesso = gerenciador.Adicionar_livro(titulo_livro, autor_livro, ano_livro);
 
             if (sucesso)
             {
@@ -171,7 +186,7 @@ namespace Prog1Projeto
             {
                 foreach (var livro in listaDeLivros)
                 {
-                    Console.WriteLine($"  ID: {livro.ID_livro} | Titulo: {livro.titulo_livro} | Autor: {livro.autor_livro}");
+                    Console.WriteLine($"  ID: {livro.ID_livro} | Titulo: {livro.titulo_livro} | Autor: {livro.autor_livro} | Ano: {livro.ano_livro}");
                 }
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -209,7 +224,7 @@ namespace Prog1Projeto
             {
                 foreach (var livro in busca)
                 {
-                    Console.WriteLine($"  ID: {livro.ID_livro} | Titulo: {livro.titulo_livro} | Autor: {livro.autor_livro}");
+                    Console.WriteLine($"  ID: {livro.ID_livro} | Titulo: {livro.titulo_livro} | Autor: {livro.autor_livro} | Ano: {livro.ano_livro}");
                 }
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine("\n" + new string('-', 50));
@@ -235,7 +250,7 @@ namespace Prog1Projeto
 
             if (livro != null)
             {
-                Console.WriteLine($"\n  Livro encontrado: {livro.titulo_livro} | Autor: {livro.autor_livro}");
+                Console.WriteLine($"\n  Livro encontrado: {livro.titulo_livro} | Autor: {livro.autor_livro} | Ano: {livro.ano_livro}");
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(new string('-', 50));
                 Console.ResetColor();
@@ -284,7 +299,7 @@ namespace Prog1Projeto
 
             if (livro != null)
             {
-                Console.WriteLine($"\n  Livro encontrado: {livro.titulo_livro} | Autor: {livro.autor_livro}");
+                Console.WriteLine($"\n  Livro encontrado: {livro.titulo_livro} | Autor: {livro.autor_livro} | Ano: {livro.ano_livro}");
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine(new string('-', 50));
                 Console.ForegroundColor = ConsoleColor.DarkGray;

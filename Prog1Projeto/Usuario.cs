@@ -44,7 +44,7 @@ namespace Prog1Projeto
         }
         public bool ListarUsuarios(out List<Usuario> usuarios)
         {
-            usuarios = usuarioDAO.ListarLivros();
+            usuarios = usuarioDAO.ListarUsuarios();
 
             if (usuarios.Count == 0 || usuarios == null)
             {
@@ -59,7 +59,7 @@ namespace Prog1Projeto
 
         public bool Buscar_usuario(string pesquisa_nome, string pesquisa_email, out List<Usuario> resultado_busca)
         {
-            resultado_busca = usuarioDAO.buscar_livro(pesquisa_nome, pesquisa_email);
+            resultado_busca = usuarioDAO.BuscarUsuario(pesquisa_nome, pesquisa_email);
 
             if (resultado_busca.Count == 0 || resultado_busca == null)
             {
@@ -75,7 +75,7 @@ namespace Prog1Projeto
         public bool Alterar_usuario(int id, string novo_nome, string novo_email)
         {
             var usuarios = usuarioDAO.ListarTodos();
-            Usuario usuario = usuarios.Find(l => l.ID_livro == id);
+            Usuario usuario = usuarios.Find(l => l.Id == id);
 
             if (usuario == null)
             {
@@ -92,7 +92,7 @@ namespace Prog1Projeto
         public bool Excluir_usuario(int id)
         {
             var usuarios = usuarioDAO.ListarTodos();
-            Usuario usuario = usuarios.Find(l => l.ID_livro == id);
+            Usuario usuario = usuarios.Find(l => l.Id == id);
 
             if (usuario == null)
             {

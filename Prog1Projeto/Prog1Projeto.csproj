@@ -104,6 +104,7 @@
     <Compile Include="Relatorios.cs" />
     <Compile Include="RelatorioDAO.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

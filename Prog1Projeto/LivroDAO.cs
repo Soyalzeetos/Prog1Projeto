@@ -18,18 +18,19 @@ namespace Prog1Projeto
             );
         }
 
-        public static void Inserir(string titulo, string autor)
+        public static void Inserir(string titulo, string autor, int ano)
         {
             using (MySqlConnection conexao = Conexaobd.fazerconexao())
             {
                 conexao.Open();
 
-                string sql = "INSERT INTO livros (titulo, autor, ano, disponivel) VALUES (@titulo, @autor, 0, TRUE)";
+                string sql = "INSERT INTO livros (titulo, autor, ano, disponivel) VALUES (@titulo, @autor, @ano, TRUE)";
 
                 using (MySqlCommand comando = new MySqlCommand(sql, conexao))
                 {
                     comando.Parameters.AddWithValue("@titulo", titulo);
                     comando.Parameters.AddWithValue("@autor", autor);
+                    comando.Parameters.AddWithValue("@no", ano);
                     comando.ExecuteNonQuery();
                 }
             }
