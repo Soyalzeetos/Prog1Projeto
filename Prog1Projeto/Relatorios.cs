@@ -12,9 +12,9 @@ namespace Prog1Projeto
             relatorioDAO.GerarComprovanteEmprestimo(usuario.Nome, livro, dataEmprestimo, usuario.CalcularPrazoDevolucao(dataEmprestimo));
         }
 
-        public void GerarRelatorioEmprestimos(List<Emprestimo> emprestimos)
+        public void GerarRelatorioEmprestimos()
         {
-            relatorioDAO.GerarRelatorioEmprestimos(emprestimos);
+            relatorioDAO.GerarRelatorioEmprestimos();
         }
     }
 }

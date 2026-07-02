@@ -2,42 +2,42 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MySql.Data.MySqlClient;
 
 namespace Prog1Projeto
 {
     public class RelatorioDAO
     {
-        public void GerarComprovanteEmprestimo(string nomeUsuario, string tituloLivro, DateTime dataEmprestimo, DateTime prazoDevolucao)
+        public List<Emprestimo> ListarEmprestimos()
         {
-            string nomeArquivo = $"Comprovante_Emprestimo_{SanitizarNome(nomeUsuario)}.txt";
-            string caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
+            List<Emprestimo> emprestimos = new List<Emprestimo>();
 
-            try
+            using (MySqlConnection conexao = Conexaobd.fazerconexao())
             {
-                using (StreamWriter writer = new StreamWriter(caminhoArquivo))
+                conexao.Open();
+
+                string sql = @"SELECT e.id, e.livroId, e.data_emprestimo, e.data_prevista, e.data_devolucao,
+                                      u.nome, l.titulo, l.autor
+                               FROM emprestimos e
+                               JOIN usuarios u ON e.usuarioId = u.id
+                               JOIN livros l ON e.livroId = l.id";
+
+                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+                using (MySqlDataReader leitor = comando.ExecuteReader())
                 {
-                    writer.WriteLine("Comprovante de Empréstimo");
-                    writer.WriteLine("------------------------");
-                    writer.WriteLine($"Usuário: {nomeUsuario}");
-                    writer.WriteLine($"Livro: {tituloLivro}");
-                    writer.WriteLine($"Data do Empréstimo: {dataEmprestimo:dd/MM/yyyy}");
-                    writer.WriteLine($"Prazo de Devolução: {prazoDevolucao:dd/MM/yyyy}");
+                    while (leitor.Read())
+                    {
+                        emprestimos.Add(MapearEmprestimo(leitor));
+                    }
                 }
+            }
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Comprovante de empréstimo gerado em '{caminhoArquivo}'.");
-                Console.ResetColor();
-            }
-            catch (Exception ex)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Erro ao gerar o comprovante de empréstimo: {ex.Message}");
-                Console.ResetColor();
-            }
+            return emprestimos;
         }
 
-        public void GerarRelatorioEmprestimos(List<Emprestimo> emprestimos)
+        public void GerarRelatorioEmprestimos()
         {
+            var emprestimos = ListarEmprestimos();
             string nomeArquivo = $"Relatorio_Emprestimos_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
             string caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
 
@@ -81,6 +81,60 @@ namespace Prog1Projeto
                 Console.WriteLine($"Erro ao gerar o relatório: {ex.Message}");
                 Console.ResetColor();
             }
+        }
+
+        public void GerarComprovanteEmprestimo(string nomeUsuario, string tituloLivro, DateTime dataEmprestimo, DateTime prazoDevolucao)
+        {
+            string nomeArquivo = $"Comprovante_Emprestimo_{SanitizarNome(nomeUsuario)}.txt";
+            string caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeArquivo);
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(caminhoArquivo))
+                {
+                    writer.WriteLine("Comprovante de Empréstimo");
+                    writer.WriteLine("------------------------");
+                    writer.WriteLine($"Usuário: {nomeUsuario}");
+                    writer.WriteLine($"Livro: {tituloLivro}");
+                    writer.WriteLine($"Data do Empréstimo: {dataEmprestimo:dd/MM/yyyy}");
+                    writer.WriteLine($"Prazo de Devolução: {prazoDevolucao:dd/MM/yyyy}");
+                }
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Comprovante de empréstimo gerado em '{caminhoArquivo}'.");
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Erro ao gerar o comprovante de empréstimo: {ex.Message}");
+                Console.ResetColor();
+            }
+        }
+
+        private Livro MapearLivro(MySqlDataReader leitor)
+        {
+            return new Livro(
+                leitor.GetInt32("livroId"),
+                leitor.GetString("titulo"),
+                leitor.GetString("autor")
+            );
+        }
+
+        private Emprestimo MapearEmprestimo(MySqlDataReader leitor)
+        {
+            DateTime? dataDevolucao = leitor.IsDBNull(leitor.GetOrdinal("data_devolucao"))
+                ? (DateTime?)null
+                : leitor.GetDateTime("data_devolucao");
+
+            return new Emprestimo(
+                leitor.GetInt32("id"),
+                MapearLivro(leitor),
+                leitor.GetString("nome"),
+                leitor.GetDateTime("data_emprestimo"),
+                leitor.GetDateTime("data_prevista").ToString("yyyy-MM-dd"),
+                dataDevolucao
+            );
         }
 
         private string SanitizarNome(string nome)
