@@ -68,8 +68,14 @@ namespace Prog1Projeto
             );
         }
 
-        public static bool InserirEmprestimo(int idLivro, string nomeCliente, string dataPrevista)
+        public static bool InserirEmprestimo(int idLivro, int usuarioId)
         {
+            Usuario usuario = new UsuarioDAO().ObterPorId(usuarioId);
+            if (usuario == null)
+            {
+                return false;
+            }
+
             using (MySqlConnection conexao = Conexaobd.fazerconexao())
             {
                 conexao.Open();
@@ -78,6 +84,9 @@ namespace Prog1Projeto
                 {
                     return false;
                 }
+
+                DateTime dataEmprestimo = DateTime.Now;
+                DateTime dataPrevista = usuario.CalcularPrazoDevolucao(dataEmprestimo);
 
                 using (MySqlTransaction transacao = conexao.BeginTransaction())
                 {
@@ -88,10 +97,10 @@ namespace Prog1Projeto
 
                         using (MySqlCommand comando = new MySqlCommand(insertSql, conexao, transacao))
                         {
-                            comando.Parameters.AddWithValue("@usuarioId", 1);
+                            comando.Parameters.AddWithValue("@usuarioId", usuarioId);
                             comando.Parameters.AddWithValue("@livroId", idLivro);
-                            comando.Parameters.AddWithValue("@dataEmprestimo", DateTime.Now.ToString("yyyy-MM-dd"));
-                            comando.Parameters.AddWithValue("@dataPrevista", dataPrevista);
+                            comando.Parameters.AddWithValue("@dataEmprestimo", dataEmprestimo.ToString("yyyy-MM-dd"));
+                            comando.Parameters.AddWithValue("@dataPrevista", dataPrevista.ToString("yyyy-MM-dd"));
                             comando.ExecuteNonQuery();
                         }
 

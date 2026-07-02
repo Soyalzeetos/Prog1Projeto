@@ -67,6 +67,31 @@ namespace Prog1Projeto
             return ListarUsuarios();
         }
 
+        public Usuario ObterPorId(int id)
+        {
+            using (MySqlConnection conexao = Conexaobd.fazerconexao())
+            {
+                conexao.Open();
+
+                string sql = "SELECT id, nome, email, tipo FROM usuarios WHERE id = @id";
+
+                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+                {
+                    comando.Parameters.AddWithValue("@id", id);
+
+                    using (MySqlDataReader leitor = comando.ExecuteReader())
+                    {
+                        if (leitor.Read())
+                        {
+                            return MapearUsuario(leitor);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public List<Usuario> BuscarUsuario(string pesquisa_nome, string pesquisa_email)
         {
             List<Usuario> usuarios = new List<Usuario>();

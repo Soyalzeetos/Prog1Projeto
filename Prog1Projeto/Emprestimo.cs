@@ -43,11 +43,11 @@ namespace Prog1Projeto
         private static List<Emprestimo> Lista_Emprestimo = new List<Emprestimo>();
         private static EmprestimoDAO EmprestimoDAO = new EmprestimoDAO();
 
-        public bool Realizar_emprestimo(Livro livro_emprestado, string nome_cliente, string data_devolucao_prevista, bool disponibilidade)
+        public bool Realizar_emprestimo(Livro livro_emprestado, int usuarioId)
         {
-            if (livro_emprestado == null || disponibilidade == false) return false;
+            if (livro_emprestado == null || livro_emprestado.disponivel == false) return false;
 
-            return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, nome_cliente, data_devolucao_prevista);
+            return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, usuarioId);
         }
 
         public bool Mostrar_emprestimo(out List<Emprestimo> emprestimos)
@@ -111,16 +111,22 @@ namespace Prog1Projeto
 
             if (livro != null)
             {
-                Console.WriteLine("\n  Nome do cliente:");
+                Console.WriteLine("\n  Id do usuário que está emprestando:");
                 Console.Write("  ");
-                string nome_cliente = Console.ReadLine();
-                Console.WriteLine("\n  Data prevista de devolucao:");
-                Console.Write("  ");
-                string data_devolucao_prevista = Console.ReadLine();
+                int id_usuario = int.Parse(Console.ReadLine());
 
-                gerenciador.Realizar_emprestimo(livro, nome_cliente, data_devolucao_prevista);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n  Cadastro de emprestimo feito com sucesso.");
+                bool sucesso = gerenciador.Realizar_emprestimo(livro, id_usuario);
+
+                if (sucesso)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\n  Cadastro de emprestimo feito com sucesso.");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Falha ao cadastrar empréstimo. Verifique se o usuário existe e se o livro está disponível.");
+                }
             }
             else
             {
