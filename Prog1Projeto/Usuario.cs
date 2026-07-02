@@ -31,7 +31,7 @@ namespace Prog1Projeto
 
         private int proximoId = 1;
         
-        public bool AdicionarUsuario(string nome, string email)
+        public bool AdicionarUsuario(string nome, string email, int tipo)
         {
             if (string.IsNullOrEmpty(nome) || string.IsNullOrWhiteSpace(email))
             {
@@ -39,7 +39,13 @@ namespace Prog1Projeto
                 Console.WriteLine("Cadastro nulo, tente novamente.");
                 return false;
             }
-            usuarioDAO.InserirUsuario(nome, email);
+            if (tipo == 1)
+            {
+                usuarioDAO.InserirUsuario(nome, email, "Professor");
+            }
+            else if (tipo == 2) {
+                string tipoUsuario = "Aluno";
+            }
             return true;
         }
         public bool ListarUsuarios(out List<Usuario> usuarios)

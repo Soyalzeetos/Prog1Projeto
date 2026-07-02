@@ -35,6 +35,7 @@ namespace Prog1Projeto
             this.disponivel = true;
         }
 
+        // Sobrecarga com ano e disponibilidade
         public Livro(int ID_livro, string titulo_livro, string autor_livro, int ano_livro, bool disponivel)
         {
             this.ID_livro = ID_livro;

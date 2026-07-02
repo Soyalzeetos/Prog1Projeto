@@ -21,7 +21,7 @@ namespace Prog1Projeto
             return new Aluno(id, nome, email);
         }
 
-        public void InserirUsuario(string nome, string email)
+        public void InserirUsuario(string nome, string email, string tipo)
         {
             using (MySqlConnection conexao = Conexaobd.fazerconexao())
             {
@@ -33,7 +33,7 @@ namespace Prog1Projeto
                 {
                     comando.Parameters.AddWithValue("@nome", nome);
                     comando.Parameters.AddWithValue("@email", email);
-                    comando.Parameters.AddWithValue("@tipo", "Aluno");
+                    comando.Parameters.AddWithValue("@tipo", tipo);
                     comando.ExecuteNonQuery();
                 }
             }
