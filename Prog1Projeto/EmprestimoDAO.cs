@@ -74,17 +74,61 @@ namespace Prog1Projeto
             {
                 conexao.Open();
 
-                string sql = @"INSERT INTO emprestimos (usuarioId, livroId, data_emprestimo, data_prevista, data_devolucao)
-                              VALUES (@usuarioId, @livroId, @dataEmprestimo, @dataPrevista, NULL)";
-
-                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+                if (!LivroEstaDisponivel(conexao, idLivro))
                 {
-                    comando.Parameters.AddWithValue("@usuarioId", 1);
-                    comando.Parameters.AddWithValue("@livroId", idLivro);
-                    comando.Parameters.AddWithValue("@dataEmprestimo", DateTime.Now.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("@dataPrevista", dataPrevista);
-                    return comando.ExecuteNonQuery() > 0;
+                    return false;
                 }
+
+                using (MySqlTransaction transacao = conexao.BeginTransaction())
+                {
+                    try
+                    {
+                        string insertSql = @"INSERT INTO emprestimos (usuarioId, livroId, data_emprestimo, data_prevista, data_devolucao)
+                                             VALUES (@usuarioId, @livroId, @dataEmprestimo, @dataPrevista, NULL)";
+
+                        using (MySqlCommand comando = new MySqlCommand(insertSql, conexao, transacao))
+                        {
+                            comando.Parameters.AddWithValue("@usuarioId", 1);
+                            comando.Parameters.AddWithValue("@livroId", idLivro);
+                            comando.Parameters.AddWithValue("@dataEmprestimo", DateTime.Now.ToString("yyyy-MM-dd"));
+                            comando.Parameters.AddWithValue("@dataPrevista", dataPrevista);
+                            comando.ExecuteNonQuery();
+                        }
+
+                        string updateSql = "UPDATE livros SET disponivel = FALSE WHERE id = @id";
+                        using (MySqlCommand comandoUpdate = new MySqlCommand(updateSql, conexao, transacao))
+                        {
+                            comandoUpdate.Parameters.AddWithValue("@id", idLivro);
+                            comandoUpdate.ExecuteNonQuery();
+                        }
+
+                        transacao.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+                        transacao.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private static bool LivroEstaDisponivel(MySqlConnection conexao, int idLivro)
+        {
+            string sql = "SELECT disponivel FROM livros WHERE id = @id LIMIT 1";
+
+            using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+            {
+                comando.Parameters.AddWithValue("@id", idLivro);
+
+                object resultado = comando.ExecuteScalar();
+                if (resultado == null || resultado == DBNull.Value)
+                {
+                    return false;
+                }
+
+                return Convert.ToBoolean(resultado);
             }
         }
 
