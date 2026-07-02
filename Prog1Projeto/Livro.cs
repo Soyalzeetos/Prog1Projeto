@@ -12,8 +12,9 @@ namespace Prog1Projeto
         public string titulo_livro { get; set; }
         public string autor_livro { get; set; }
         public int ano_livro { get; set; }
+        public bool disponivel { get; set; }
 
-        public Livro() { this.ano_livro = 0; }
+        public Livro() { this.ano_livro = 0; this.disponivel = true; }
 
         public Livro(int ID_livro, string titulo_livro, string autor_livro)
         {
@@ -21,6 +22,7 @@ namespace Prog1Projeto
             this.titulo_livro = titulo_livro;
             this.autor_livro = autor_livro;
             this.ano_livro = 0;
+            this.disponivel = true;
         }
 
         // Sobrecarga com ano do livro
@@ -30,6 +32,16 @@ namespace Prog1Projeto
             this.titulo_livro = titulo_livro;
             this.autor_livro = autor_livro;
             this.ano_livro = ano_livro;
+            this.disponivel = true;
+        }
+
+        public Livro(int ID_livro, string titulo_livro, string autor_livro, int ano_livro, bool disponivel)
+        {
+            this.ID_livro = ID_livro;
+            this.titulo_livro = titulo_livro;
+            this.autor_livro = autor_livro;
+            this.ano_livro = ano_livro;
+            this.disponivel = disponivel;
         }
     }
 

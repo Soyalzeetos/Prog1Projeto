@@ -11,7 +11,9 @@ namespace Prog1Projeto
             return new Livro(
                 leitor.GetInt32("livroId"),
                 leitor.GetString("titulo"),
-                leitor.GetString("autor")
+                leitor.GetString("autor"),
+                leitor.GetInt32("ano"),
+                leitor.GetBoolean("disponivel")
             );
         }
 
@@ -95,10 +97,10 @@ namespace Prog1Projeto
                 conexao.Open();
 
                 string sql = @"SELECT e.id, e.livroId, e.data_emprestimo, e.data_prevista, e.data_devolucao,
-                              u.nome, l.titulo, l.autor
-                              FROM emprestimos e
-                              JOIN usuarios u ON e.usuarioId = u.id
-                              JOIN livros l ON e.livroId = l.id";
+                                      u.nome, l.titulo, l.autor, l.ano, l.disponivel
+                               FROM emprestimos e
+                               JOIN usuarios u ON e.usuarioId = u.id
+                               JOIN livros l ON e.livroId = l.id";
 
                 using (MySqlCommand comando = new MySqlCommand(sql, conexao))
                 using (MySqlDataReader leitor = comando.ExecuteReader())
@@ -111,6 +113,36 @@ namespace Prog1Projeto
             }
 
             return emprestimos;
+        }
+
+        public static Emprestimo ObterPorId(int ID_emprestimo)
+        {
+            using (MySqlConnection conexao = Conexaobd.fazerconexao())
+            {
+                conexao.Open();
+
+                string sql = @"SELECT e.id, e.livroId, e.data_emprestimo, e.data_prevista, e.data_devolucao,
+                                      u.nome, l.titulo, l.autor, l.ano, l.disponivel
+                               FROM emprestimos e
+                               JOIN usuarios u ON e.usuarioId = u.id
+                               JOIN livros l ON e.livroId = l.id
+                               WHERE e.id = @id";
+
+                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+                {
+                    comando.Parameters.AddWithValue("@id", ID_emprestimo);
+
+                    using (MySqlDataReader leitor = comando.ExecuteReader())
+                    {
+                        if (leitor.Read())
+                        {
+                            return MapearEmprestimo(leitor);
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static bool AtualizarDevolucao(int ID_emprestimo)
