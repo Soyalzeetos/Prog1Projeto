@@ -21,6 +21,11 @@ namespace Prog1Projeto
             return new Aluno(id, nome, email);
         }
 
+        public void InserirUsuario(string nome, string email)
+        {
+            InserirUsuario(nome, email, "Aluno");
+        }
+
         public void InserirUsuario(string nome, string email, string tipo)
         {
             using (MySqlConnection conexao = Conexaobd.fazerconexao())
@@ -37,34 +42,6 @@ namespace Prog1Projeto
                     comando.ExecuteNonQuery();
                 }
             }
-        }
-
-        public List<Usuario> ListarUsuarios()
-        {
-            List<Usuario> usuarios = new List<Usuario>();
-
-            using (MySqlConnection conexao = Conexaobd.fazerconexao())
-            {
-                conexao.Open();
-
-                string sql = "SELECT id, nome, email, tipo FROM usuarios";
-
-                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
-                using (MySqlDataReader leitor = comando.ExecuteReader())
-                {
-                    while (leitor.Read())
-                    {
-                        usuarios.Add(MapearUsuario(leitor));
-                    }
-                }
-            }
-
-            return usuarios;
-        }
-
-        public List<Usuario> ListarTodos()
-        {
-            return ListarUsuarios();
         }
 
         public Usuario ObterPorId(int id)
@@ -90,6 +67,34 @@ namespace Prog1Projeto
             }
 
             return null;
+        }
+
+        public List<Usuario> ListarUsuarios()
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+
+            using (MySqlConnection conexao = Conexaobd.fazerconexao())
+            {
+                conexao.Open();
+
+                string sql = "SELECT id, nome, email,tipo FROM usuarios";
+
+                using (MySqlCommand comando = new MySqlCommand(sql, conexao))
+                using (MySqlDataReader leitor = comando.ExecuteReader())
+                {
+                    while (leitor.Read())
+                    {
+                        usuarios.Add(MapearUsuario(leitor));
+                    }
+                }
+            }
+
+            return usuarios;
+        }
+
+        public List<Usuario> ListarTodos()
+        {
+            return ListarUsuarios();
         }
 
         public List<Usuario> BuscarUsuario(string pesquisa_nome, string pesquisa_email)

@@ -39,14 +39,21 @@ namespace Prog1Projeto
                 Console.WriteLine("Cadastro nulo, tente novamente.");
                 return false;
             }
+
             if (tipo == 1)
             {
                 usuarioDAO.InserirUsuario(nome, email, "Professor");
+                return true;
             }
-            else if (tipo == 2) {
+            else if (tipo == 2)
+            {
                 usuarioDAO.InserirUsuario(nome, email, "Aluno");
+                return true;
             }
-            return true;
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Tipo inválido. Use 1 para Professor ou 2 para Aluno.");
+            return false;
         }
         public bool ListarUsuarios(out List<Usuario> usuarios)
         {
