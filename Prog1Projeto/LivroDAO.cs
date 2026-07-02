@@ -14,7 +14,8 @@ namespace Prog1Projeto
             return new Livro(
                 leitor.GetInt32("id"),
                 leitor.GetString("titulo"),
-                leitor.GetString("autor")
+                leitor.GetString("autor"),
+                leitor.GetInt32("ano")
             );
         }
 
@@ -30,7 +31,7 @@ namespace Prog1Projeto
                 {
                     comando.Parameters.AddWithValue("@titulo", titulo);
                     comando.Parameters.AddWithValue("@autor", autor);
-                    comando.Parameters.AddWithValue("@no", ano);
+                    comando.Parameters.AddWithValue("@ano", ano);
                     comando.ExecuteNonQuery();
                 }
             }
@@ -44,7 +45,7 @@ namespace Prog1Projeto
             {
                 conexao.Open();
 
-                string sql = "SELECT id, titulo, autor FROM livros";
+                string sql = "SELECT id, titulo, autor, ano FROM livros";
 
                 using (MySqlCommand comando = new MySqlCommand(sql, conexao))
                 using (MySqlDataReader leitor = comando.ExecuteReader())
@@ -72,7 +73,7 @@ namespace Prog1Projeto
             {
                 conexao.Open();
 
-                string sql = "SELECT id, titulo, autor FROM livros WHERE 1 = 1";
+                string sql = "SELECT id, titulo, autor, ano FROM livros WHERE 1 = 1";
 
                 if (!string.IsNullOrWhiteSpace(pesquisa_titulo))
                 {
