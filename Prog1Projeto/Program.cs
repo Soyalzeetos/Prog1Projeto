@@ -111,7 +111,7 @@ namespace Prog1Projeto
                         {
                             foreach (var u in lista)
                             {
-                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email}");
+                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email} | Email: {u}");
                             }
                         }
                         interacao_usuario.AguardarTecla();
