@@ -44,7 +44,7 @@ namespace Prog1Projeto
                 usuarioDAO.InserirUsuario(nome, email, "Professor");
             }
             else if (tipo == 2) {
-                string tipoUsuario = "Aluno";
+                usuarioDAO.InserirUsuario(nome, email, "Aluno");
             }
             return true;
         }
@@ -109,6 +109,130 @@ namespace Prog1Projeto
             }
 
             return usuarioDAO.Excluir(id);
+        }
+    }
+
+    public class InteracoesUsuario
+    {
+        private GerenciamentoUsuario gerenciador = new GerenciamentoUsuario();
+
+        public void AguardarTecla()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("  Aperte qualquer tecla para continuar:");
+            Console.ResetColor();
+            Console.Write("  ");
+            Console.ReadKey();
+        }
+
+        public void MenuAlterar()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(new string('=', 50));
+            Console.WriteLine("             Alterar dados de Usuarios");
+            Console.WriteLine(new string('=', 50));
+            Console.ResetColor();
+
+            Console.WriteLine("\n  Digite o ID do usuario para alterar seus dados:");
+            Console.Write("  ");
+            int ID_alterar = int.Parse(Console.ReadLine());
+
+            Usuario usuario = new UsuarioDAO().ListarTodos().Find(u => u.Id == ID_alterar);
+
+            if (usuario != null)
+            {
+                Console.WriteLine($"\n  Usuario encontrado: {usuario.Nome} | Email: {usuario.Email}");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+
+                Console.WriteLine("\n  Novo Nome:");
+                Console.Write("  ");
+                string novo_nome = Console.ReadLine();
+                Console.WriteLine("\n  Novo Email:");
+                Console.Write("  ");
+                string novo_email = Console.ReadLine();
+
+                bool sucesso = gerenciador.Alterar_usuario(ID_alterar, novo_nome, novo_email);
+                Console.WriteLine();
+
+                Console.ForegroundColor = sucesso ? ConsoleColor.Green : ConsoleColor.Red;
+                Console.WriteLine(sucesso ? "  Alteracao feita com sucesso" : "  Alteracao mal sucedida");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  Usuario não existente ou ID errado.");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+            }
+            AguardarTecla();
+        }
+
+        public void MenuExcluir()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(new string('=', 50));
+            Console.WriteLine("                Excluir Usuarios");
+            Console.WriteLine(new string('=', 50));
+            Console.ResetColor();
+
+            Console.WriteLine("\n  Digite o ID de um usuario para o excluir:");
+            Console.Write("  ");
+            int ID_excluir = int.Parse(Console.ReadLine());
+
+            // Corrigido: usar uma instância de UsuarioDAO (método não é estático)
+            Usuario usuario = new UsuarioDAO().ListarUsuarios().Find(u => u.Id == ID_excluir);
+
+            if (usuario != null)
+            {
+                Console.WriteLine($"\n  Usuario encontrado: {usuario.Nome} | Email: {usuario.Email}");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(new string('-', 50));
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("\n  Deseja excluir esse usuario (s/n):");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("  (ATENCAO:Esse passo é irreversivel)");
+                Console.ResetColor();
+                Console.Write("  ");
+                char confirmacao = char.ToLower(Console.ReadKey().KeyChar);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                if (confirmacao == 's')
+                {
+                    gerenciador.Excluir_usuario(ID_excluir);
+                    Console.WriteLine("\nUsuario excluido com sucesso");
+                }
+                else if (confirmacao == 'n')
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nExclusão cancelada");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nOpcao Invalida");
+                }
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n  Usuario com ID( {ID_excluir} ) não encontrado ou não existente");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+            }
+            AguardarTecla();
         }
     }
 }

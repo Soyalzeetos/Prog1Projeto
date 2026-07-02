@@ -11,6 +11,8 @@ namespace Prog1Projeto
     {
         static InteracoesLivro interacao_livro = new InteracoesLivro();
         static InteracoesEmprestimo interacao_emprestimo = new InteracoesEmprestimo();
+        static InteracoesUsuario interacao_usuario = new InteracoesUsuario();
+        static GerenciamentoUsuario gerenciador_usuario = new GerenciamentoUsuario();
 
         static void Main(string[] args)
         {
@@ -70,11 +72,11 @@ namespace Prog1Projeto
                 Console.ResetColor();
                 Console.WriteLine();
 
-                Console.WriteLine("  [1] - Cadastrar Novo Livro");
-                Console.WriteLine("  [2] - Listar Todos os Livros");
-                Console.WriteLine("  [3] - Buscar Livro");
-                Console.WriteLine("  [4] - Alterar Dados de um Livro");
-                Console.WriteLine("  [5] - Remover Livro");
+                Console.WriteLine("  [1] - Cadastrar Novo Usuário");
+                Console.WriteLine("  [2] - Listar Todos os Usuários");
+                Console.WriteLine("  [3] - Buscar Usuário");
+                Console.WriteLine("  [4] - Alterar Dados de um Usuário");
+                Console.WriteLine("  [5] - Remover Usuário");
                 Console.WriteLine("  [0] - Voltar");
 
                 Console.WriteLine();
@@ -83,22 +85,119 @@ namespace Prog1Projeto
                 Console.ResetColor();
                 Console.Write(" Digite a opção desejada: ");
 
-                opcaoAba = int.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out opcaoAba);
 
                 switch (opcaoAba)
                 {
-                    case 1: interacao_livro.MenuCadastrar(); break;
-                    case 2: interacao_livro.MenuListar(); break;
-                    case 3: interacao_livro.MenuBuscar(); break;
-                    case 4: interacao_livro.MenuAlterar(); break;
-                    case 5: interacao_livro.MenuExcluir(); break;
-                    case 0: break;
+                    case 1:
+                        Console.WriteLine("\n  Nome:");
+                        Console.Write("  ");
+                        string nome = Console.ReadLine();
+                        Console.WriteLine("\n  Email:");
+                        Console.Write("  ");
+                        string email = Console.ReadLine();
+                        Console.WriteLine("\n  Tipo (1 = Professor, 2 = Aluno):");
+                        Console.Write("  ");
+                        int.TryParse(Console.ReadLine(), out int tipo);
+                        bool adicionou = gerenciador_usuario.AdicionarUsuario(nome, email, tipo);
+                        Console.ForegroundColor = adicionou ? ConsoleColor.Green : ConsoleColor.Red;
+                        Console.WriteLine(adicionou ? "\n  Cadastro de usuario feito com sucesso." : "\n  Falha ao cadastrar usuario.");
+                        Console.ResetColor();
+                        interacao_usuario.AguardarTecla();
+                        break;
+
+                    case 2:
+                        if (gerenciador_usuario.ListarUsuarios(out List<Usuario> lista))
+                        {
+                            foreach (var u in lista)
+                            {
+                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email}");
+                            }
+                        }
+                        interacao_usuario.AguardarTecla();
+                        break;
+
+                    case 3:
+                        Console.WriteLine("\n  Nome (ou deixe vazio):");
+                        Console.Write("  ");
+                        string pesquisaNome = Console.ReadLine();
+                        Console.WriteLine("\n  Email (ou deixe vazio):");
+                        Console.Write("  ");
+                        string pesquisaEmail = Console.ReadLine();
+                        if (gerenciador_usuario.Buscar_usuario(pesquisaNome, pesquisaEmail, out List<Usuario> resultados))
+                        {
+                            foreach (var u in resultados)
+                            {
+                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email}");
+                            }
+                        }
+                        interacao_usuario.AguardarTecla();
+                        break;
+
+                    case 4:
+                        Console.WriteLine("\n  Digite o ID do usuario para alterar seus dados:");
+                        Console.Write("  ");
+                        if (int.TryParse(Console.ReadLine(), out int idAlterar))
+                        {
+                            Console.WriteLine("\n  Novo Nome (ou enter para manter):");
+                            Console.Write("  ");
+                            string novoNome = Console.ReadLine();
+                            Console.WriteLine("\n  Novo Email (ou enter para manter):");
+                            Console.Write("  ");
+                            string novoEmail = Console.ReadLine();
+                            bool alterou = gerenciador_usuario.Alterar_usuario(idAlterar, novoNome, novoEmail);
+                            Console.ForegroundColor = alterou ? ConsoleColor.Green : ConsoleColor.Red;
+                            Console.WriteLine(alterou ? "\n  Alteracao feita com sucesso" : "\n  Alteracao mal sucedida");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("\n  ID inválido.");
+                            Console.ResetColor();
+                        }
+                        interacao_usuario.AguardarTecla();
+                        break;
+
+                    case 5:
+                        Console.WriteLine("\n  Digite o ID de um usuario para o excluir:");
+                        Console.Write("  ");
+                        if (int.TryParse(Console.ReadLine(), out int idExcluir))
+                        {
+                            Console.Write("  Confirma exclusão? (s/n): ");
+                            char confirm = char.ToLower(Console.ReadKey().KeyChar);
+                            Console.WriteLine();
+                            if (confirm == 's')
+                            {
+                                bool excluiu = gerenciador_usuario.Excluir_usuario(idExcluir);
+                                Console.ForegroundColor = excluiu ? ConsoleColor.Green : ConsoleColor.Red;
+                                Console.WriteLine(excluiu ? "\n  Usuario excluido com sucesso" : "\n  Falha ao excluir usuario");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("\n  Exclusão cancelada");
+                                Console.ResetColor();
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("\n  ID inválido.");
+                            Console.ResetColor();
+                        }
+                        interacao_usuario.AguardarTecla();
+                        break;
+
+                    case 0:
+                        break;
+
                     default:
                         Console.WriteLine("\n  Opção inválida!");
-                        interacao_livro.AguardarTecla();
+                        interacao_usuario.AguardarTecla();
                         break;
                 }
-
             }
         }
 
