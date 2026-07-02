@@ -45,7 +45,10 @@ namespace Prog1Projeto
 
         public bool Realizar_emprestimo(Livro livro_emprestado, int usuarioId)
         {
-            if (livro_emprestado == null || livro_emprestado.disponivel == false) return false;
+            if (livro_emprestado == null) return false;
+
+            bool disponibilidade = EmprestimoDAO.LivroEstaDisponivel(livro_emprestado.ID_livro);
+            if (!disponibilidade) return false;
 
             return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, usuarioId);
         }
@@ -116,7 +119,6 @@ namespace Prog1Projeto
                 int id_usuario = int.Parse(Console.ReadLine());
 
                 bool sucesso = gerenciador.Realizar_emprestimo(livro, id_usuario);
-
                 if (sucesso)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
