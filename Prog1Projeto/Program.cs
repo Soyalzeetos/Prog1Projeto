@@ -43,7 +43,7 @@ namespace Prog1Projeto
 
                 switch (opcao)
                 {
-                    case 1: MenuAbaLivros(); break;
+                    case 1: MenuAbaUsuario(); break;
                     case 2: MenuAbaLivros(); break;
                     case 3: MenuAbaEmprestimo(); break;
                     case 0:
@@ -54,6 +54,51 @@ namespace Prog1Projeto
                         interacao_livro.AguardarTecla();
                         break;
                 }
+            }
+        }
+
+        static void MenuAbaUsuario()
+        {
+            int opcaoAba = -1;
+            while (opcaoAba != 0)
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(new string('=', 50));
+                Console.WriteLine("                    USUARIOS");
+                Console.WriteLine(new string('=', 50));
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.WriteLine("  [1] - Cadastrar Novo Livro");
+                Console.WriteLine("  [2] - Listar Todos os Livros");
+                Console.WriteLine("  [3] - Buscar Livro");
+                Console.WriteLine("  [4] - Alterar Dados de um Livro");
+                Console.WriteLine("  [5] - Remover Livro");
+                Console.WriteLine("  [0] - Voltar");
+
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(new string('-', 50));
+                Console.ResetColor();
+                Console.Write(" Digite a opção desejada: ");
+
+                opcaoAba = int.Parse(Console.ReadLine());
+
+                switch (opcaoAba)
+                {
+                    case 1: interacao_livro.MenuCadastrar(); break;
+                    case 2: interacao_livro.MenuListar(); break;
+                    case 3: interacao_livro.MenuBuscar(); break;
+                    case 4: interacao_livro.MenuAlterar(); break;
+                    case 5: interacao_livro.MenuExcluir(); break;
+                    case 0: break;
+                    default:
+                        Console.WriteLine("\n  Opção inválida!");
+                        interacao_livro.AguardarTecla();
+                        break;
+                }
+
             }
         }
 

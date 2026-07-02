@@ -43,9 +43,12 @@ namespace Prog1Projeto
         private static List<Emprestimo> Lista_Emprestimo = new List<Emprestimo>();
         private static EmprestimoDAO EmprestimoDAO = new EmprestimoDAO();
 
-        public bool Realizar_emprestimo(Livro livro_emprestado, string nome_cliente, string data_devolucao_prevista, bool disponibilidade)
+        public bool Realizar_emprestimo(Livro livro_emprestado, string nome_cliente, string data_devolucao_prevista)
         {
-            if (livro_emprestado == null || disponibilidade == false) return false;
+            if (livro_emprestado == null) return false;                       // checar null antes de usar o objeto
+
+            bool disponibilidade = EmprestimoDAO.LivroEstaDisponivel(livro_emprestado.ID_livro); // sem 'int' aqui
+            if (!disponibilidade) return false;
 
             return EmprestimoDAO.InserirEmprestimo(livro_emprestado.ID_livro, nome_cliente, data_devolucao_prevista);
         }
@@ -118,9 +121,17 @@ namespace Prog1Projeto
                 Console.Write("  ");
                 string data_devolucao_prevista = Console.ReadLine();
 
-                gerenciador.Realizar_emprestimo(livro, nome_cliente, data_devolucao_prevista);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n  Cadastro de emprestimo feito com sucesso.");
+                bool sucesso = gerenciador.Realizar_emprestimo(livro, nome_cliente, data_devolucao_prevista);
+                if (sucesso)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\n  Cadastro de emprestimo feito com sucesso.");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Não foi possível realizar o empréstimo. Livro indisponível ou erro de cadastro.");
+                }
             }
             else
             {

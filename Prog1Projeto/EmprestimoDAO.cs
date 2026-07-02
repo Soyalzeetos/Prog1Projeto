@@ -114,7 +114,17 @@ namespace Prog1Projeto
             }
         }
 
-        private static bool LivroEstaDisponivel(MySqlConnection conexao, int idLivro)
+
+        public static bool LivroEstaDisponivel(int idLivro)
+        {
+            using (MySqlConnection conexao = Conexaobd.fazerconexao())
+            {
+                conexao.Open();
+                return LivroEstaDisponivel(conexao, idLivro);
+            }
+        }
+
+        public static bool LivroEstaDisponivel(MySqlConnection conexao, int idLivro)
         {
             string sql = "SELECT disponivel FROM livros WHERE id = @id LIMIT 1";
 
