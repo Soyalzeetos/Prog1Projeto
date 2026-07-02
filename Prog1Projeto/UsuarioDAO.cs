@@ -13,12 +13,18 @@ namespace Prog1Projeto
             string email = leitor.GetString("email");
             string tipo = leitor.GetString("tipo");
 
+            Usuario usuario;
             if (tipo == "Professor")
             {
-                return new Professor(id, nome, email);
+                usuario = new Professor(id, nome, email);
+            }
+            else
+            {
+                usuario = new Aluno(id, nome, email);
             }
 
-            return new Aluno(id, nome, email);
+            usuario.Tipo = tipo;
+            return usuario;
         }
 
         public void InserirUsuario(string nome, string email)

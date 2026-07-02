@@ -41,7 +41,7 @@ namespace Prog1Projeto
                 Console.ResetColor();
 
                 Console.Write(" Digite a opção desejada: ");
-                opcao = int.Parse(Console.ReadLine());
+                opcao = LerInt();
 
                 switch (opcao)
                 {
@@ -56,6 +56,21 @@ namespace Prog1Projeto
                         interacao_livro.AguardarTecla();
                         break;
                 }
+            }
+        }
+
+        static int LerInt()
+        {
+            while (true)
+            {
+                string entrada = Console.ReadLine();
+                if (int.TryParse(entrada, out int valor))
+                    return valor;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  Entrada inválida. Digite um número inteiro.");
+                Console.ResetColor();
+                Console.Write(" Digite a opção desejada: ");
             }
         }
 
@@ -111,7 +126,7 @@ namespace Prog1Projeto
                         {
                             foreach (var u in lista)
                             {
-                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email} | Email: {u}");
+                                Console.WriteLine($"  ID: {u.Id} | Nome: {u.Nome} | Email: {u.Email} | Email: {u.Tipo}");
                             }
                         }
                         interacao_usuario.AguardarTecla();
@@ -227,7 +242,7 @@ namespace Prog1Projeto
                 Console.ResetColor();
                 Console.Write(" Digite a opção desejada: ");
 
-                opcaoAba = int.Parse(Console.ReadLine());
+                opcaoAba = LerInt();
 
                 switch (opcaoAba)
                 {
@@ -271,7 +286,7 @@ namespace Prog1Projeto
                 Console.ResetColor();
                 Console.Write(" Digite a opção desejada: ");
 
-                opcaoAba = int.Parse(Console.ReadLine());
+                opcaoAba = LerInt();
 
                 switch (opcaoAba)
                 {

@@ -13,6 +13,7 @@ namespace Prog1Projeto
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
+        public string Tipo { get; set; }
 
         public abstract DateTime CalcularPrazoDevolucao(DateTime dataEmprestimo);
 
